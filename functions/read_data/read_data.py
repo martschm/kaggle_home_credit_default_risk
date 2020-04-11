@@ -85,26 +85,12 @@ def read_pos_cash_balance_data(path_data="../data/"):
     return df_pos_cash_bal
 
 
-def read_description(path_data="../data/"):
-    """Function to read data description
-    Args:
-        path_data: string, path to data
-    Returns:
-        df_description (pandas dataframe)
-    """
-    df_description = pd.read_csv(path_data+"HomeCredit_columns_description.csv", encoding="ISO-8859-1")
-    df_description.columns = [col.lower() for col in df_description]
-    df_description.drop(columns="unnamed: 0", inplace=True)
-
-    return df_description
-
-
 def read_all_data(path_data="../data/"):
     """Function reads all data
     Args:
         path_data: string, path to data
     Returns:
-        a, b, c (pandas dataframes)
+        df_dict (dictionary, containing all dataframes)
     """
     df_app_train, df_app_test = read_application_train_test_data(path_data)
     df_bureau, df_bureau_bal = read_bureau_data(path_data)
@@ -112,7 +98,14 @@ def read_all_data(path_data="../data/"):
     df_prev_app = read_previous_application_data(path_data)
     df_installment_pay = read_installment_payment_data(path_data)
     df_pos_cash_bal = read_pos_cash_balance_data(path_data)
-    df_description = read_description(path_data)
-    return df_app_train, df_app_test, df_bureau, df_bureau_bal, \
-           df_cc_bal, df_prev_app, df_installment_pay, df_pos_cash_bal, \
-           df_description
+    df_dict = {
+        "df_app_train": df_app_train,
+        "df_app_test": df_app_test,
+        "df_bureau": df_bureau,
+        "df_bureau_bal": df_bureau_bal,
+        "df_cc_bal": df_cc_bal,
+        "df_prev_app": df_prev_app,
+        "df_installment_pay": df_installment_pay,
+        "df_pos_cash_bal": df_pos_cash_bal
+    }
+    return df_dict
