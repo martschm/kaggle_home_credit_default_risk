@@ -35,7 +35,7 @@ def convert_column_names(df_dict_orig):
 
     for k in df_dict.keys():
 
-        df = df_dict[k]
+        df = df_dict[k].copy()
 
         # convert all numeric columns to float64
         int_cols = [col for col in df if df[col].dtype == "int64" and not col in exclude_cols]
@@ -79,4 +79,4 @@ def convert_column_names(df_dict_orig):
         # replace df in dict
         df_dict[k] = df
 
-        return df_dict
+    return df_dict
