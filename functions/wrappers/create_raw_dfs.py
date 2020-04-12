@@ -1,11 +1,10 @@
 import sys
 sys.path.append("../")
 
-import numpy as np
-import pandas as pd
-
 from functions.read_data import read_data
-from functions.read_data import convert_column_names
+from functions.read_data import convert_column_names_types
+
+import pandas as pd
 
 
 def create_raw_dfs(path_data="../data/"):
@@ -16,8 +15,8 @@ def create_raw_dfs(path_data="../data/"):
     Returns:
         df_a, df_b, df_c (pandas dataframes)
     """
-    df_dict_orig = read_data.read_all_data()
-    df_dict = convert_column_names.convert_column_names(df_dict_orig)
+    df_dict_orig = read_data.read_all_data(path_data)
+    df_dict = convert_column_names_types.convert_column_names_types(df_dict_orig)
     
     df_app = pd.concat([df_dict["df_app_train"],df_dict["df_app_test"]], axis=0).reset_index(drop=True)
     df_bureau = df_dict["df_bureau"].reset_index(drop=True)

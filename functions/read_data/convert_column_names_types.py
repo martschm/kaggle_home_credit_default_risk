@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 
-def convert_column_names(df_dict_orig):
+def convert_column_names_types(df_dict_orig):
     """This function converts all column names and adds prefixes relating to
     dataset and column type
     Args:
@@ -70,6 +70,18 @@ def convert_column_names(df_dict_orig):
         ]
         cols_other_new = ["char_" + col for col in cols_other_orig]
         df.rename(dict(zip(cols_other_orig, cols_other_new)), axis=1, inplace=True)
+        
+        # convert character columns with only two distinct values (yes,no) to binary
+        bin_map = {"Y":1, "Yes":1, "y":1, "N":0, "No":0, "n":0}
+        convert_to_bin = []
+        cols = [col for col in df if "char_" in col]
+        for col in cols:
+            if np.isin(df[col].dropna().unique(), ["Y","N","Yes","No","y","n"]).all():
+                convert_to_bin.append(col)
+        if len(convert_to_bin)>0:
+            for bin_col in convert_to_bin:
+                df[bin_col.replace("char_","bin_")] = df[bin_col].map(bin_map)
+                df.drop(columns=[bin_col], inplace=True)
 
         # add prefixes to columns
         all_cols_orig = [col for col in df if not col in exclude_cols]
